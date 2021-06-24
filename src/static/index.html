@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QRCode Scanner To PC</title>
+    <style>
+      video {
+        transform: translateX(-50%) translateY(-50%);
+        top: 50%;
+        left: 50%;
+        min-width: 100%;
+        min-height: 100%;
+        width: auto;
+        height: auto;
+        position: absolute;
+      }
+    </style>
+  </head>
+  <body>
+    <video autoplay></video>
+  </body>
+
+  <script>
+    let backendUrl = "";
+
+    function sendTextToBackend(text) {
+      fetch("/paste", { method: "POST", body: text });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      //To check the device and add iOS support
+      window.iOS = ["iPad", "iPhone", "iPod"].indexOf(navigator.platform) >= 0;
+      window.isMediaStreamAPISupported =
+        navigator &&
+        navigator.mediaDevices &&
+        "enumerateDevices" in navigator.mediaDevices;
+      window.noCameraPermission = false;
+    });
+
+    //Initializing qr scanner
+    window.addEventListener("load", (event) => {
+      QRReader.init(); //To initialize QR Scanner
+      // Set camera overlay size
+      setTimeout(() => {
+        if (window.isMediaStreamAPISupported) {
+          scan();
+        }
+      }, 1000);
+    });
+
+    function scan() {
+      QRReader.scan((result) => {
+        console.log(result);
+        sendTextToBackend(result);
+
+        // TODO alert/vibration/whatever;
+
+        setTimeout(scan, 1000);
+      }, false);
+    }
+  </script>
+  <script src="./qrcode.js"></script>
+</html>

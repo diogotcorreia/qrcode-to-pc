@@ -1,0 +1,9 @@
+[package]
+name = "qrcode-to-pc"
+version = "0.1.0"
+edition = "2018"
+authors = ["Diogo Correia"]
+
+[dependencies]
+enigo = "0.0.14"
+rocket = { version = "0.5.0-rc.1", features = ["tls"] }

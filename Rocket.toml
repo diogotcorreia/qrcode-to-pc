@@ -1,0 +1,6 @@
+[default]
+address = "0.0.0.0"
+
+[default.tls]
+key = "cert.key"
+certs = "cert.crt"
